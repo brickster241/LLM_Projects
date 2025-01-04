@@ -48,3 +48,10 @@ dependencies:
     - feedparser
     - twilio
     - pydub
+    - streamlit
+    - PyPDF2
+    - speechrecognition
+    - vosk
+    - pyaudio
+    - openai-whisper
+

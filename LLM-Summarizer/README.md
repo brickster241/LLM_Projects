@@ -95,10 +95,7 @@ LLM-Projects/
 ├── environment.yml   # List of dependencies
 ├── README.md          # Project documentation
 ├── LLM-Summarizer/             # Project Directory
-│   ├── pdf_handler.py  # PDF parsing logic
-│   ├── web_scraper.py  # Web scraping logic
-│   ├── yt_transcriber.py # YouTube transcription logic
-│   ├── audio_handler.py  # Audio file processing logic
+│   ├── llm_summarizer.py  # PDF file, Audio file, Youtube URL processing logic
 │   └── app.py          # Main Streamlit App
 ```
 

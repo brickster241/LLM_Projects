@@ -178,3 +178,6 @@ products_vectorstore/
 
 # ignore diagnostics reports
 **/report.txt
+
+# ignore vosk Model
+vosk-model-en-us-0.22-lgraph/
