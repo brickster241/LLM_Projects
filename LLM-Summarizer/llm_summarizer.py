@@ -12,13 +12,16 @@ class LLM_Handler:
     
     # Constructor , which stores the API Key.
 
-    def __init__(self):
+    def __init__(self, summary_size):
         
-        # Initialize OpenAI API key
+        # Initialize OpenAI API key, and other variables
+        
         self.API_KEY = os.getenv("OPENAI_API_KEY")
         self.LLM_MODEL = "gpt-4o-mini"
         self.WHISPER_MODEL = os.getenv("WHISPER_MODEL")
         self.ASSETS_PATH = os.getenv("ASSETS_PATH")
+        self.summary_size = summary_size
+
         # if not self.api_key:
         #     raise ValueError("OpenAI API Key not found in .env file.")
 

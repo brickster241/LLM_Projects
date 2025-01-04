@@ -51,16 +51,18 @@ elif input_type == "YouTube":
         user_input = youtube_url
         st.write(f"🎥 YouTube URL entered: {youtube_url}")
 
+summary_size = st.number_input("Maximum Words in Summary : ", min_value=75, max_value=500)
+
 # Summarize button
 if st.button("Summarize"):
     # Create a new LLM Handler Object.
-    llm_handler = LLM_Handler()
+    llm_handler = LLM_Handler(summary_size)
 
     if user_input:
 
         # Audio
         if input_type == "Audio":
-            with st.spinner("Transcribing audio..."):
+            with st.spinner("Transcribing Audio File..."):
                 try:
                     # Save the uploaded file temporarily
                     with open("temp_audio.wav", "wb") as f:
@@ -69,14 +71,27 @@ if st.button("Summarize"):
                     # Transcribe using Whisper
                     transcription = llm_handler.extract_text_from_audio(user_input.name)
                     
-                    st.success("Transcription complete!")
-                    st.text_area("Transcription Result", transcription, height=200)
+                    st.success("Transcription complete !!")
+
                 except Exception as e:
-                    st.error(f"Error during transcription: {e}")
+                    st.error(f"Error during Audio transcription: {e}")
                 finally:
                     # Clean up temporary file
                     if os.path.exists("temp_audio.wav"):
                         os.remove("temp_audio.wav")
+
+        # PDF                
+        elif input_type == "PDF":
+            with st.spinner("Parsing PDF File..."):
+                try:
+                    
+                    # Parse using PyPDF2
+                    pdf_text = llm_handler.extract_text_from_pdf(uploaded_pdf)
+                    
+                    st.success("Parsing complete !!")
+                    
+                except Exception as e:
+                    st.error(f"Error during PDF Parsing: {e}")
 
         # Generate the summary (Placeholder logic)
         st.session_state["summary"] = f"Here is the summary for your {input_type} input!"
