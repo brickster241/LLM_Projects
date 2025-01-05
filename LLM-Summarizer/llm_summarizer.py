@@ -4,6 +4,7 @@ import os
 import PyPDF2
 import whisper
 import uuid
+from openai import OpenAI
 
 """
 Python class implementation for LLM_Handler.
@@ -13,18 +14,18 @@ class LLM_Handler:
     
     # Constructor , which stores the API Key.
 
-    def __init__(self, summary_size):
+    def __init__(self):
         
         # Initialize OpenAI API key, and other variables
         
         self.API_KEY = os.getenv("OPENAI_API_KEY")
         self.LLM_MODEL = "gpt-4o-mini"
-        self.WHISPER_MODEL = os.getenv("WHISPER_MODEL")
-        self.ASSETS_PATH = os.getenv("ASSETS_PATH")
-        self.summary_size = summary_size
+        self.WHISPER_MODEL = "base"
 
         if not self.API_KEY:
             raise ValueError("OpenAI API Key not found in .env file.")
+        else:
+            self.openai = OpenAI()
 
     # Save the uploaded file to a temporary location and return the absolute path.
     def save_temp_file(self, uploaded_file):
@@ -54,8 +55,6 @@ class LLM_Handler:
         temp_audio_path = self.save_temp_file(uploaded_audio_file)
             
         try:
-
-            
             model = whisper.load_model(self.WHISPER_MODEL)
             
             # Perform transcription using Whisper
@@ -88,5 +87,27 @@ class LLM_Handler:
         finally: 
             # Clean up the temporary file
             os.remove(temp_video_path)
+
+    ## Connect to OpenAI's Model and fetch summary in Markdown Format.
+    def fetch_summary_from_transcription(self, transcription_text, summary_size, input_type):
+        if transcription_text is None:
+            return ""
         
+        # system prompt -> that tells them what task they are performing and what tone they should use.
+        # user prompt -> the conversation starter that they should reply to.
+
+        system_prompt = f"""You are a professional summarizer. Summarize the provided transcription into a structured
+          format. Use headings and bullet points to organize the summary, capturing the main ideas
+          , critical points, and key takeaways for easy readability. Respond the formatted summary in Markdown."""
+
+        user_prompt = f"""Please summarize the {input_type} transcription text below into a Markdown-formatted structured summary
+          of no more than {summary_size} words. Highlight the main topics, critical points, and key takeaways using headings and bullet points.
+          Transcription : {transcription_text}"""
+
+        response = self.openai.chat.completions.create(model = "gpt-4o-mini",
+                        messages = [
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": user_prompt}
+                        ])
+        return response.choices[0].message.content
         

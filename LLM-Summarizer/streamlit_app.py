@@ -15,12 +15,6 @@ st.set_page_config(
 # Load environment variables (OPENAI API Key)
 load_dotenv()
 
-# Initialize session state for storing inputs
-if "summary" not in st.session_state:
-    st.session_state["summary"] = None
-
-background_image_path =  os.path.join(os.getenv("ASSETS_PATH"), "background_streamlit.jpg")
-
 # Add custom CSS for background customization
 st.markdown(
     f"""
@@ -39,6 +33,8 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+llm_handler = LLM_Handler()
 
 # Title of the app
 st.sidebar.title("🌟 LLM Summarizer 🌟")
@@ -86,12 +82,11 @@ elif input_type == "🎥 Video":
         user_input = uploaded_video
         st.sidebar.write(f"🎥 Video File uploaded successfully!")
 
-summary_size = st.sidebar.number_input("Maximum Words in Summary : ", min_value=75, max_value=500)
+summary_size = st.sidebar.number_input("Maximum Words in Summary : ", min_value=75, max_value=1000)
 
 # Summarize button
 if st.sidebar.button("Summarize"):
     # Create a new LLM Handler Object.
-    llm_handler = LLM_Handler(summary_size)
     transcription = None
     if user_input:
 
@@ -123,9 +118,8 @@ if st.sidebar.button("Summarize"):
                 else:
                     st.sidebar.error(f"Error during PDF Parsing !!")
                     st.session_state["summary"] = None
-                    
-        
-        # Youtube                
+                           
+        # Video               
         elif input_type == "🎥 Video":
             with st.spinner("Transcribing Video File..."):
 
@@ -141,9 +135,9 @@ if st.sidebar.button("Summarize"):
                     st.session_state["summary"] = None
 
         # Generate the summary (Placeholder logic)
-        st.session_state["summary"] = f"Here is the summary for your {input_type} input!"
-        st.title("📋 Summary")
-        st.write(transcription)
+        with st.spinner("Summarizing Data..."):
+            markdown_text = llm_handler.fetch_summary_from_transcription(transcription, summary_size, input_type)
+            st.markdown(body=markdown_text, unsafe_allow_html=True)
     else:
         st.sidebar.warning("Please provide a valid input before summarizing.")
 

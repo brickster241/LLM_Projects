@@ -6,17 +6,17 @@ Welcome to the **LLM Summarizer**! This application utilizes cutting-edge Langua
 
 ## 🚀 Features
 
-### 🌐 Summarize Website Content
-- Simply provide a URL to any web page, and the tool will extract the main content and generate a summary.
-
 ### 📺 Summarize YouTube Videos
-- Paste a YouTube video link to generate a text-based summary of its audio content (leveraging automated transcription).
+- Upload a custom .mp4 video to generate a text-based summary of its audio content (leveraging automated transcription).
 
 ### 📄 Summarize PDFs
 - Upload a PDF document, and the tool will parse its text to create a concise summary.
 
 ### 🎧 Summarize Audio Files
 - Upload an audio file, and the tool will convert its content to text using speech-to-text technology and generate a summary.
+
+### ✂️ Character Limit Control
+- Summaries are tailored to fit your desired length, ensuring they remain concise and relevant.
 
 ### 🌈 Seamless User Experience
 - Built using **Streamlit**, the web interface is simple, responsive, and user-friendly.
@@ -26,30 +26,26 @@ Welcome to the **LLM Summarizer**! This application utilizes cutting-edge Langua
 ## 🛠️ How It Works
 
 1. **Input Formats:**
-   - URL (Website article)
-   - YouTube Video Link
+   - .mp4 Video File
    - PDF File
-   - Audio File
+   - .mp3 / .wav Audio File
 
 2. **Processing:**
    - Extracts relevant content from the input.
-   - Uses an LLM (e.g., OpenAI's GPT) to analyze and summarize the content.
+   - Uses an LLM (e.g., OpenAI's GPT-4o-mini) to analyze and summarize the content.
 
 3. **Output:**
    - Displays the summary directly on the web page.
-   - Option to download the summary as a text file.
 
 ---
 
 ## 🧑‍💻 Technologies Used
 
-- **Backend:** OpenAI GPT-4o-mini (or another LLM API).
+- **Backend:** OpenAI GPT-4o-mini.
 - **Frontend:** Streamlit for a dynamic web interface.
 - **Additional Tools:**
-  - `BeautifulSoup` or `Selenium` for web scraping.
-  - `PyPDF2` or `pdfplumber` for PDF parsing.
-  - `yt-dlp` and `whisper` for YouTube transcription.
-  - `Whisper` or other speech-to-text tools for audio file processing.
+  - `PyPDF2` for PDF parsing.
+  - `Whisper` for speech-to-text tools and audio/video file processing.
 
 ---
 
@@ -57,7 +53,7 @@ Welcome to the **LLM Summarizer**! This application utilizes cutting-edge Langua
 
 ### Prerequisites
 - Python 3.11+
-- An OpenAI API Key (or key for your chosen LLM provider).
+- An OpenAI API Key.
 
 ### Installation
 
@@ -93,10 +89,10 @@ Welcome to the **LLM Summarizer**! This application utilizes cutting-edge Langua
 LLM-Projects/
 ├── .env             # .env File for storing OPENAI API Key
 ├── environment.yml   # List of dependencies
-├── README.md          # Project documentation
 ├── LLM-Summarizer/             # Project Directory
 │   ├── llm_summarizer.py  # PDF file, Audio file, Youtube URL processing logic
-│   └── app.py          # Main Streamlit App
+│   ├── streamlit_app.py          # Main Streamlit App
+│   ├── README.md          # Project documentation
 ```
 
 ---
@@ -104,10 +100,10 @@ LLM-Projects/
 ## 🌟 Example
 
 1. Upload a **MP4 Video**, and get:
-   - A text summary of the video's content (audio transcription included).
+   - A text summary of the video's content (based on audio transcription).
 
 2. Upload a **PDF file**, and:
    - A concise summary of its content is displayed.
 
 3. Upload an **audio file**, and:
-   - A text transcription of its content is generated along with a summary.
+   - A summary of file's transcribed content is present.
