@@ -83,7 +83,7 @@ Welcome to the **LLM Summarizer**! This application utilizes cutting-edge Langua
 
 2. Open your browser and navigate to the local URL provided by Streamlit (e.g., `http://localhost:8501`).
 
-3. Enter a URL, YouTube video link, upload a PDF file, or upload an audio file to get your summary!
+3. Upload video, upload a PDF file, or upload an audio file to get your summary!
 
 ---
 
@@ -103,14 +103,11 @@ LLM-Projects/
 
 ## 🌟 Example
 
-1. Enter a **web page URL**, and you'll receive:
-   - A summary of the key points from the article.
-
-2. Paste a **YouTube link**, and get:
+1. Upload a **MP4 Video**, and get:
    - A text summary of the video's content (audio transcription included).
 
-3. Upload a **PDF file**, and:
+2. Upload a **PDF file**, and:
    - A concise summary of its content is displayed.
 
-4. Upload an **audio file**, and:
+3. Upload an **audio file**, and:
    - A text transcription of its content is generated along with a summary.

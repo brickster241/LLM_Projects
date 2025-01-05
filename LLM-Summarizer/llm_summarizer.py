@@ -3,6 +3,7 @@
 import os
 import PyPDF2
 import whisper
+import uuid
 
 """
 Python class implementation for LLM_Handler.
@@ -22,26 +23,70 @@ class LLM_Handler:
         self.ASSETS_PATH = os.getenv("ASSETS_PATH")
         self.summary_size = summary_size
 
-        # if not self.api_key:
-        #     raise ValueError("OpenAI API Key not found in .env file.")
+        if not self.API_KEY:
+            raise ValueError("OpenAI API Key not found in .env file.")
+
+    # Save the uploaded file to a temporary location and return the absolute path.
+    def save_temp_file(self, uploaded_file):
+        unique_filename = str(uuid.uuid4()) + os.path.splitext(uploaded_file.name)[1]
+        with open(unique_filename, "wb") as f:
+            f.write(uploaded_file.getbuffer())
+        return os.path.abspath(unique_filename)
 
     ## Extracts text from a PDF file.
     def extract_text_from_pdf(self, pdf_file):
         
-        pdf_reader = PyPDF2.PdfReader(pdf_file)
-        text = ""
-        for page in pdf_reader.pages:
-            text += page.extract_text()
-        return text
-    
-    ## Extracts text from a Audio File.
-    def extract_text_from_audio(self, audio_file_name):
-        # Load the Whisper model
-        model = whisper.load_model(self.WHISPER_MODEL)
-        audio_file_path = os.path.join(self.ASSETS_PATH, audio_file_name)
-        print(f"Audio File Path : {audio_file_path}")
-        # Transcribe the .wav file
-        result = model.transcribe(audio_file_path)
+        try:
 
-        return result["text"]
+            pdf_reader = PyPDF2.PdfReader(pdf_file)
+            text = ""
+            for page in pdf_reader.pages:
+                text += page.extract_text()
+            return text
+        
+        except Exception as e:
+            print(f"Exception during PDF Parsing : {e}")
+
+    
+    ## Extracts text from a .wav or .mp3 Audio File.
+    def extract_text_from_audio(self, uploaded_audio_file):
+        # Save the uploaded audio file to a temporary path
+        temp_audio_path = self.save_temp_file(uploaded_audio_file)
+            
+        try:
+
+            
+            model = whisper.load_model(self.WHISPER_MODEL)
+            
+            # Perform transcription using Whisper
+            result = model.transcribe(temp_audio_path)
+            return result["text"]
+        
+        except Exception as e:
+            print(f"Exception during Audio Transcription : {e}")
+        
+        finally: 
+            # Clean up the temporary file
+            os.remove(temp_audio_path)
+
+    
+    ## Extracts text from .mp4 Video File.
+    def extract_text_from_video(self, uploaded_video_file):
+        # Save the uploaded audio file to a temporary path
+        temp_video_path = self.save_temp_file(uploaded_video_file)
+
+        try:
+            model = whisper.load_model(self.WHISPER_MODEL)
+            
+            # Perform transcription using Whisper
+            result = model.transcribe(temp_video_path)
+            return result["text"]  
+
+        except Exception as e:
+            print(f"Exception during Video Transcription : {e}")
+
+        finally: 
+            # Clean up the temporary file
+            os.remove(temp_video_path)
+        
         
