@@ -87,23 +87,12 @@ Welcome to the **LLM Summarizer**! This application utilizes cutting-edge Langua
 
 ```plaintext
 LLM-Projects/
-├── .env             # .env File for storing OPENAI API Key
-├── environment.yml   # List of dependencies
-├── LLM-Summarizer/             # Project Directory
-│   ├── llm_summarizer.py  # PDF file, Audio file, Youtube URL processing logic
-│   ├── streamlit_app.py          # Main Streamlit App
-│   ├── README.md          # Project documentation
+├── .env                         # .env File for storing OPENAI API Key
+├── environment.yml              # List of dependencies
+├── LLM-Summarizer/              # Project Directory
+│   ├── llm_summarizer.py        # PDF file, Audio file, Youtube URL processing logic
+│   ├── streamlit_app.py         # Main Streamlit App
+│   ├── README.md                # Project documentation
 ```
 
 ---
-
-## 🌟 Example
-
-1. Upload a **MP4 Video**, and get:
-   - A text summary of the video's content (based on audio transcription).
-
-2. Upload a **PDF file**, and:
-   - A concise summary of its content is displayed.
-
-3. Upload an **audio file**, and:
-   - A summary of file's transcribed content is present.
