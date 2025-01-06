@@ -2,6 +2,7 @@ import streamlit as st
 from llm_summarizer import LLM_Handler
 from dotenv import load_dotenv
 import os
+import ollama
 
 # Set up the page configuration
 st.set_page_config(
@@ -40,7 +41,7 @@ llm_handler = LLM_Handler()
 st.sidebar.title("🌟 LLM Summarizer 🌟")
 st.sidebar.divider()
 
-st.sidebar.write("""               
+st.sidebar.write("""
 Welcome to the **LLM Summarizer**, an intuitive, AI-powered application designed to simplify and condense information from various media sources into concise summaries.  
 
 🚀 **Features** :   
@@ -48,13 +49,29 @@ Welcome to the **LLM Summarizer**, an intuitive, AI-powered application designed
 - 🎙️ **Audio Processing**: Upload `.wav` files to transcribe spoken content and generate a digestible summary.  
 - 🎥 **Video Summarization**: Upload mp4 files, and the tool fetches the transcript, condenses it, and provides key highlights.  
 - ✂️ **Character Limit Control**: Summaries are tailored to fit your desired length, ensuring they remain concise and relevant.  
+- 🤖 **Multiple LLM Selection**: Choose from various AI models for summarization, including **GPT-4o-mini**, **qwen 2.5**, **llama3.2**, and **gemma**, to match your specific needs.  
 """)
+
 st.sidebar.divider()
 
 # Dropdown for input type selection
 input_type = st.sidebar.selectbox(
     "Select Input Type :",
     ["📄 PDF", "🎙️ Audio", "🎥 Video"]
+)
+
+# Options with icons
+llm_options = {
+    "gpt-4o-mini": "🤖 GPT-4o-Mini",
+    "qwen2.5:latest": "🧠 Qwen 2.5",
+    "llama3.2": "🦙 Llama 3.2",
+    "gemma:7b": "✨ Gemma"
+}
+
+# Sidebar for LLM selection
+selected_llm = st.sidebar.selectbox(
+    "Select an LLM for summarization:",
+    options=list(llm_options.values())
 )
 
 # Initialize input variable
@@ -135,9 +152,14 @@ if st.sidebar.button("Summarize"):
                     st.session_state["summary"] = None
 
         # Generate the summary (Placeholder logic)
-        with st.spinner("Summarizing Data..."):
-            markdown_text = llm_handler.fetch_summary_from_transcription(transcription, summary_size, input_type)
-            st.markdown(body=markdown_text, unsafe_allow_html=True)
+        try:
+            with st.spinner("Summarizing Data..."):
+                llm_model = [key for key, value in llm_options.items() if value == selected_llm][0]
+                markdown_text = llm_handler.fetch_summary_from_transcription(transcription, summary_size, input_type, llm_model)
+                st.markdown(body=markdown_text, unsafe_allow_html=True)
+        except Exception as e:
+            st.toast(f"Error While Summarizing : {e}")
+            print(f"Exception : {e}")
     else:
         st.sidebar.warning("Please provide a valid input before summarizing.")
 

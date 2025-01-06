@@ -1,6 +1,6 @@
-# LLM Summarizer
+# MultiMedia-LLM-Summarization-Tool
 
-Welcome to the **LLM Summarizer**! This application utilizes cutting-edge Language Model (LLM) capabilities to generate concise and insightful summaries from diverse input formats. Whether you have a web article, a YouTube video, a PDF document, or an audio file, this tool can help distill key points efficiently.
+Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-edge Language Model (LLMs) capabilities to generate concise and insightful summaries from diverse input formats. Whether you have a video, a PDF document, or an audio file, this tool can help distill key points efficiently.
 
 ---
 
@@ -17,6 +17,9 @@ Welcome to the **LLM Summarizer**! This application utilizes cutting-edge Langua
 
 ### ✂️ Character Limit Control
 - Summaries are tailored to fit your desired length, ensuring they remain concise and relevant.
+
+### 🤖 Multiple LLM Selection
+- Choose from various AI models for summarization, including **GPT-4o-mini**, **qwen 2.5**, **llama3.2**, and **gemma**, to match your specific needs.
 
 ### 🌈 Seamless User Experience
 - Built using **Streamlit**, the web interface is simple, responsive, and user-friendly.
@@ -41,7 +44,7 @@ Welcome to the **LLM Summarizer**! This application utilizes cutting-edge Langua
 
 ## 🧑‍💻 Technologies Used
 
-- **Backend:** OpenAI GPT-4o-mini.
+- **Backend:** LLM Models ->  GPT-4o-mini, Qwen 2.5, Gemma, Llama3.2
 - **Frontend:** Streamlit for a dynamic web interface.
 - **Additional Tools:**
   - `PyPDF2` for PDF parsing.
@@ -54,6 +57,7 @@ Welcome to the **LLM Summarizer**! This application utilizes cutting-edge Langua
 ### Prerequisites
 - Python 3.11+
 - An OpenAI API Key.
+- Ollama's Open source Models.
 
 ### Installation
 
@@ -68,6 +72,13 @@ Welcome to the **LLM Summarizer**! This application utilizes cutting-edge Langua
    ```
 
 3. Add a `.env` file, containing `OPEN_API_KEY=yourAPIKey`.
+
+4. In case you want to use LLMs other than `gpt-4o-mini`, install Ollama and download models : 
+   ```bash
+   ollama run gemma:7b
+   ollama run qwen2.5:7b
+   ollama run llama3.2:3b
+   ```
 
 ### Usage
 

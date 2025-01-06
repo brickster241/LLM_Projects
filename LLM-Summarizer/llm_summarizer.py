@@ -5,6 +5,7 @@ import PyPDF2
 import whisper
 import uuid
 from openai import OpenAI
+import ollama
 
 """
 Python class implementation for LLM_Handler.
@@ -19,7 +20,6 @@ class LLM_Handler:
         # Initialize OpenAI API key, and other variables
         
         self.API_KEY = os.getenv("OPENAI_API_KEY")
-        self.LLM_MODEL = "gpt-4o-mini"
         self.WHISPER_MODEL = "base"
 
         if not self.API_KEY:
@@ -89,7 +89,7 @@ class LLM_Handler:
             os.remove(temp_video_path)
 
     ## Connect to OpenAI's Model and fetch summary in Markdown Format.
-    def fetch_summary_from_transcription(self, transcription_text, summary_size, input_type):
+    def fetch_summary_from_transcription(self, transcription_text, summary_size, input_type, llm_model):
         if transcription_text is None:
             return ""
         
@@ -103,11 +103,20 @@ class LLM_Handler:
         user_prompt = f"""Please summarize the {input_type} transcription text below into a Markdown-formatted structured summary
           of no more than {summary_size} words. Highlight the main topics, critical points, and key takeaways using headings and bullet points.
           Transcription : {transcription_text}"""
-
-        response = self.openai.chat.completions.create(model = "gpt-4o-mini",
-                        messages = [
-                            {"role": "system", "content": system_prompt},
-                            {"role": "user", "content": user_prompt}
-                        ])
-        return response.choices[0].message.content
+        
+        response = None
+        # Check Model Type
+        if llm_model == "gpt-4o-mini":
+            response = self.openai.chat.completions.create(model = "gpt-4o-mini",
+                            messages = [
+                                {"role": "system", "content": system_prompt},
+                                {"role": "user", "content": user_prompt}
+                            ])
+            return response.choices[0].message.content
+        else:
+            response = ollama.chat(model=llm_model, messages=[
+                                {"role": "system", "content": system_prompt},
+                                {"role": "user", "content": user_prompt}
+                            ])
+            return response['message']['content']
         
