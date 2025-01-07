@@ -155,8 +155,14 @@ if st.sidebar.button("Summarize"):
         try:
             with st.spinner("Summarizing Data..."):
                 llm_model = [key for key, value in llm_options.items() if value == selected_llm][0]
-                markdown_text = llm_handler.fetch_summary_from_transcription(transcription, summary_size, input_type, llm_model)
-                st.markdown(body=markdown_text, unsafe_allow_html=True)
+                markdown_text = ""
+                summary_st_placeholder = st.empty()
+                for chunk in llm_handler.fetch_summary_from_transcription(transcription, summary_size, input_type, llm_model):
+                    if chunk is not None:
+                        markdown_text += chunk
+                        summary_st_placeholder.markdown(body=markdown_text, unsafe_allow_html=True)
+                st.success("Transcription Summary Complete !!")
+
         except Exception as e:
             st.toast(f"Error While Summarizing : {e}")
             print(f"Exception : {e}")

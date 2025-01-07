@@ -111,12 +111,15 @@ class LLM_Handler:
                             messages = [
                                 {"role": "system", "content": system_prompt},
                                 {"role": "user", "content": user_prompt}
-                            ])
-            return response.choices[0].message.content
+                            ], stream=True)
+            for chunk in response:
+                yield chunk.choices[0].delta.content
+
         else:
             response = ollama.chat(model=llm_model, messages=[
                                 {"role": "system", "content": system_prompt},
                                 {"role": "user", "content": user_prompt}
-                            ])
-            return response['message']['content']
+                            ], stream=True)
+            for chunk in response:
+                yield chunk.message.content
         
