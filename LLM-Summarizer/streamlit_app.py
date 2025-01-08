@@ -64,8 +64,9 @@ input_type = st.sidebar.selectbox(
 llm_options = {
     "gpt-4o-mini": "🤖 GPT-4o-Mini",
     "qwen2.5:latest": "🧠 Qwen 2.5",
-    "llama3.2": "🦙 Llama 3.2",
-    "gemma:7b": "✨ Gemma"
+    "llama3.2:3b": "🦙 Llama 3.2",
+    "gemma:7b": "✨ Gemma",
+    "mistral:7b": "💎 Mistral"
 }
 
 # Sidebar for LLM selection

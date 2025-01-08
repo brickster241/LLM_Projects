@@ -97,7 +97,7 @@ class LLM_Handler:
         # user prompt -> the conversation starter that they should reply to.
 
         system_prompt = f"""You are a professional summarizer. Summarize the provided transcription into a structured
-          format. Use headings and bullet points to organize the summary, capturing the main ideas
+          format. Use paragraphs, headings and bullet points to organize the summary, capturing the main ideas
           , critical points, and key takeaways for easy readability. Respond the formatted summary in Markdown."""
 
         user_prompt = f"""Please summarize the {input_type} transcription text below into a Markdown-formatted structured summary

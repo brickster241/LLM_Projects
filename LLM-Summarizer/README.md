@@ -19,7 +19,7 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
 - Summaries are tailored to fit your desired length, ensuring they remain concise and relevant.
 
 ### 🤖 Multiple LLM Selection
-- Choose from various AI models for summarization, including **GPT-4o-mini**, **qwen 2.5**, **llama3.2**, and **gemma**, to match your specific needs.
+- Choose from various AI models for summarization, including **GPT-4o-mini**, **qwen 2.5**, **llama3.2**, **gemma** and **mistral**, to match your specific needs.
 
 ### 🌈 Seamless User Experience
 - Built using **Streamlit**, the web interface is simple, responsive, and user-friendly.
@@ -44,7 +44,7 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
 
 ## 🧑‍💻 Technologies Used
 
-- **Backend:** LLM Models ->  GPT-4o-mini, Qwen 2.5, Gemma, Llama3.2
+- **Backend:** LLM Models ->  GPT-4o-mini, Qwen 2.5, Gemma, Llama3.3, Mistral
 - **Frontend:** Streamlit for a dynamic web interface.
 - **Additional Tools:**
   - `PyPDF2` for PDF parsing.
@@ -58,6 +58,7 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
 - Python 3.11+
 - An OpenAI API Key.
 - Ollama's Open source Models.
+- Ensure you have ffmpeg installed and added to PATH, for Speech-to-Text conversion.
 
 ### Installation
 
@@ -78,6 +79,7 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
    ollama run gemma:7b
    ollama run qwen2.5:7b
    ollama run llama3.2:3b
+   ollama run mistral:7b
    ```
 
 ### Usage
