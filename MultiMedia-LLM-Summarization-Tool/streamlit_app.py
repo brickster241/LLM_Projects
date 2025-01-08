@@ -1,8 +1,6 @@
 import streamlit as st
 from llm_summarizer import LLM_Handler
 from dotenv import load_dotenv
-import os
-import ollama
 
 # Set up the page configuration
 st.set_page_config(
