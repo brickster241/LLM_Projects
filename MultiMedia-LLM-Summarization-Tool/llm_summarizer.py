@@ -96,13 +96,16 @@ class LLM_Handler:
         # system prompt -> that tells them what task they are performing and what tone they should use.
         # user prompt -> the conversation starter that they should reply to.
 
-        system_prompt = f"""You are a professional summarizer. Summarize the provided transcription into a structured
-          format. Use paragraphs, headings and bullet points to organize the summary, capturing the main ideas
-          , critical points, and key takeaways for easy readability. Respond the formatted summary in Markdown."""
+        system_prompt = f"""You are a professional summarizer. Summarize the provided transcription into a structured format
+          using natural language. Organize the summary under headings and subheadings with flowing, coherent sentences. 
+          Use bullet points only where necessary, ensuring the text is readable and well-connected. 
+          Prioritize clarity and a logical flow of ideas, capturing the main points, critical details, and actionable takeaways.
+         Deliver the summary in Markdown format.
+"""
 
-        user_prompt = f"""Please summarize the {input_type} transcription text below into a Markdown-formatted structured summary
-          of no more than {summary_size} words. Highlight the main topics, critical points, and key takeaways using headings and bullet points.
-          Transcription : {transcription_text}"""
+        user_prompt = f"""Please summarize the {input_type} transcription text below into a structured summary
+          of no more than {summary_size} words. Use headings and bullet points to organize the summary, capturing the main ideas
+          , critical points, and key takeaways for easy readability. Respond in markdown format. Transcription : {transcription_text}"""
         
         response = None
         # Check Model Type

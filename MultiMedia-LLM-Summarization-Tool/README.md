@@ -67,9 +67,12 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
    git clone https://github.com/brickster241/LLM_Projects.git
    ```
 
-2. Create environment and install required dependencies using Anaconda:
+2. Go inside directory, create and activate environment and install required dependencies using Anaconda:
    ```bash
-   conda env create -f environment.yml
+   cd MultiMedia-LLM-Summarization-Tool
+   conda create --name llm_env python=3.11
+   conda activate llm_env
+   pip install -r requirements.txt
    ```
 
 3. Add a `.env` file, containing `OPEN_API_KEY=yourAPIKey`.
@@ -101,11 +104,11 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
 ```plaintext
 LLM-Projects/
 ├── .env                         # .env File for storing OPENAI API Key
-├── environment.yml              # List of dependencies
 ├── LLM-Summarizer/              # Project Directory
 │   ├── llm_summarizer.py        # PDF file, Audio file, Youtube URL processing logic
 │   ├── streamlit_app.py         # Main Streamlit App
 │   ├── README.md                # Project documentation
+│   ├── requirements.txt         # Requirements.txt file for creating environment
 ```
 
 ---

@@ -1,0 +1,8 @@
+PyPDF2
+ollama
+openai
+openai-whisper
+python-dotenv
+jupyterlab
+ipywidgets
+streamlit

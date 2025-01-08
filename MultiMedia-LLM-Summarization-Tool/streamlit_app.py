@@ -47,7 +47,7 @@ Welcome to the **LLM Summarizer**, an intuitive, AI-powered application designed
 - 🎙️ **Audio Processing**: Upload `.wav` files to transcribe spoken content and generate a digestible summary.  
 - 🎥 **Video Summarization**: Upload mp4 files, and the tool fetches the transcript, condenses it, and provides key highlights.  
 - ✂️ **Character Limit Control**: Summaries are tailored to fit your desired length, ensuring they remain concise and relevant.  
-- 🤖 **Multiple LLM Selection**: Choose from various AI models for summarization, including **GPT-4o-mini**, **qwen 2.5**, **llama3.2**, and **gemma**, to match your specific needs.  
+- 🤖 **Multiple LLM Selection**: Choose from various AI models for summarization, to compare outputs between Frontier LLMs and Open-Source LLMs.  
 """)
 
 st.sidebar.divider()
