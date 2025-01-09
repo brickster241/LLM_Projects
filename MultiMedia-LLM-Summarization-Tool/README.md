@@ -19,7 +19,7 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
 - Summaries are tailored to fit your desired length, ensuring they remain concise and relevant.
 
 ### 🤖 Multiple LLM Selection
-- Choose from various AI models for summarization, including **GPT-4o-mini**, **qwen 2.5**, **llama3.2**, **gemma** and **mistral**, to match your specific needs.
+- Choose from various AI models for summarization, to match your specific needs.
 
 ### 🌈 Seamless User Experience
 - Built using **Streamlit**, the web interface is simple, responsive, and user-friendly.
@@ -44,7 +44,7 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
 
 ## 🧑‍💻 Technologies Used
 
-- **Backend:** LLM Models ->  GPT-4o-mini, Qwen 2.5, Gemma, Llama3.3, Mistral
+- **Backend:** LLM Models ->  GPT-4o-mini, Claude-3-Haiku, Gemini-1.5-Flash, Qwen 2.5, Gemma, Llama3.3, Mistral
 - **Frontend:** Streamlit for a dynamic web interface.
 - **Additional Tools:**
   - `PyPDF2` for PDF parsing.
@@ -56,7 +56,7 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
 
 ### Prerequisites
 - Python 3.11+
-- An OpenAI API Key.
+- An OpenAI API Key, Anthropic API Key and Google API Key.
 - Ollama's Open source Models.
 - Ensure you have ffmpeg installed and added to PATH, for Speech-to-Text conversion.
 
@@ -75,9 +75,14 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
    pip install -r requirements.txt
    ```
 
-3. Add a `.env` file, containing `OPEN_API_KEY=yourAPIKey`.
+3. Add a `.env` file, containing all your API Keys : 
+   ```code
+   OPENAI_API_KEY=yourOPENAIAPIKey
+   ANTHROPIC_API_KEY=yourANHTROPICAPIKey
+   GOOGLE_API_KEY=yourGOOGLEAPIKey
+   ```
 
-4. In case you want to use LLMs other than `gpt-4o-mini`, install Ollama and download models : 
+4. In case you want to use LLMs other than `gpt-4o-mini`, install Ollama and download models: 
    ```bash
    ollama run gemma:7b
    ollama run qwen2.5:7b

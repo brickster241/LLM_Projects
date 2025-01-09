@@ -61,6 +61,8 @@ input_type = st.sidebar.selectbox(
 # Options with icons
 llm_options = {
     "gpt-4o-mini": "🤖 GPT-4o-Mini",
+    "claude-3-haiku-20240307": "🌟 Claude-3-Haiku",
+    "gemini-1.5-flash": "🪐 Gemini-1.5-Flash",
     "qwen2.5:latest": "🧠 Qwen 2.5",
     "llama3.2:3b": "🦙 Llama 3.2",
     "gemma:7b": "✨ Gemma",
@@ -86,7 +88,7 @@ if input_type == "📄 PDF":
 
 elif input_type == "🎙️ Audio":
     # File uploader for audio
-    uploaded_audio = st.sidebar.file_uploader("Upload an .wav Audio File : ", type=["wav"])
+    uploaded_audio = st.sidebar.file_uploader("Upload an .wav Audio File : ", type=["mp3", "wav"])
     if uploaded_audio:
         user_input = uploaded_audio
         st.sidebar.write("🎵 Audio file uploaded successfully!")
@@ -163,7 +165,7 @@ if st.sidebar.button("Summarize"):
                 st.success("Transcription Summary Complete !!")
 
         except Exception as e:
-            st.toast(f"Error While Summarizing : {e}")
+            st.write(f"Error While Summarizing : {e}")
             print(f"Exception : {e}")
     else:
         st.sidebar.warning("Please provide a valid input before summarizing.")

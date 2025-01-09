@@ -5,6 +5,8 @@ import PyPDF2
 import whisper
 import uuid
 from openai import OpenAI
+from anthropic import Anthropic
+import google.generativeai as genai
 import ollama
 
 """
@@ -19,13 +21,27 @@ class LLM_Handler:
         
         # Initialize OpenAI API key, and other variables
         
-        self.API_KEY = os.getenv("OPENAI_API_KEY")
-        self.WHISPER_MODEL = "base"
+        self._openai_api_key = os.getenv('OPENAI_API_KEY')
+        self._anthropic_api_key = os.getenv('ANTHROPIC_API_KEY')
+        self._google_api_key = os.getenv('GOOGLE_API_KEY')
+        self.openai_client = None
+        self.claude_client = None
+        self.gemini_client = None
 
-        if not self.API_KEY:
+        if not self._openai_api_key:
             raise ValueError("OpenAI API Key not found in .env file.")
         else:
-            self.openai = OpenAI()
+            self.openai_client = OpenAI()
+        if not self._anthropic_api_key:
+            raise ValueError("Anthropic API Key not found in .env file.")
+        else:
+            self.claude_client = Anthropic()
+        if not self._google_api_key:
+            raise ValueError("Google API Key not found in .env file.")
+        else:
+            genai.configure()
+        
+        self.WHISPER_MODEL = "base"
 
     # Save the uploaded file to a temporary location and return the absolute path.
     def save_temp_file(self, uploaded_file):
@@ -104,19 +120,46 @@ class LLM_Handler:
 """
 
         user_prompt = f"""Please summarize the {input_type} transcription text below into a structured summary
-          of no more than {summary_size} words. Use headings and bullet points to organize the summary, capturing the main ideas
-          , critical points, and key takeaways for easy readability. Respond in markdown format. Transcription : {transcription_text}"""
+          of no more than {summary_size} words. Use bullet points only where necessary, ensuring the text is readable and well-connected. 
+          Prioritize clarity and a logical flow of ideas, capturing the main points, critical details, and actionable takeaways. Respond in markdown format. Transcription : {transcription_text}"""
         
         response = None
         # Check Model Type
         if llm_model == "gpt-4o-mini":
-            response = self.openai.chat.completions.create(model = "gpt-4o-mini",
+            response = self.openai_client.chat.completions.create(model = "gpt-4o-mini",
                             messages = [
                                 {"role": "system", "content": system_prompt},
                                 {"role": "user", "content": user_prompt}
                             ], stream=True)
             for chunk in response:
                 yield chunk.choices[0].delta.content
+
+        elif llm_model == "claude-3-haiku-20240307":
+            response = self.claude_client.messages.stream(
+                model="claude-3-haiku-20240307",
+                max_tokens=summary_size,
+                system=system_prompt,
+                messages=[
+                    {"role": "user", "content": user_prompt}
+                ]
+            )
+            with response as stream:
+                for text in stream.text_stream:
+                    yield text
+
+        elif llm_model == "gemini-1.5-flash":
+            self.gemini_client = genai.GenerativeModel(
+                model_name='gemini-1.5-flash',
+                system_instruction=system_prompt
+            )
+            response = self.gemini_client.generate_content(
+                stream=True,
+                contents=[
+                    {"role": "user", "parts": user_prompt}
+                ]
+            )
+            for chunk in response:
+                yield chunk.text
 
         else:
             response = ollama.chat(model=llm_model, messages=[
