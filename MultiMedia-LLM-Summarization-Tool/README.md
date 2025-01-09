@@ -69,7 +69,7 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
 
 2. Go inside directory, create and activate environment and install required dependencies using Anaconda:
    ```bash
-   cd MultiMedia-LLM-Summarization-Tool
+   cd LLM_Projects/MultiMedia-LLM-Summarization-Tool
    conda create --name llm_env python=3.11
    conda activate llm_env
    pip install -r requirements.txt
@@ -92,9 +92,8 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
 
 ### Usage
 
-1. Navigate to the LLM-Summarizer directory and Run the Streamlit app:
+1. Run the Streamlit app:
    ```bash
-   cd LLM_Summarizer
    streamlit run app.py
    ```
 
@@ -108,12 +107,12 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
 
 ```plaintext
 LLM-Projects/
-├── .env                         # .env File for storing OPENAI API Key
-├── LLM-Summarizer/              # Project Directory
-│   ├── llm_summarizer.py        # PDF file, Audio file, Youtube URL processing logic
-│   ├── streamlit_app.py         # Main Streamlit App
-│   ├── README.md                # Project documentation
-│   ├── requirements.txt         # Requirements.txt file for creating environment
+├── .env                                            # .env File for storing OPENAI API Key
+├── MultiMedia-LLM-Summarization-Tool/              # Project Directory
+│   ├── llm_summarizer.py                           # PDF file, Audio file, Youtube URL processing logic
+│   ├── streamlit_app.py                            # Main Streamlit App
+│   ├── README.md                                   # Project documentation
+│   ├── requirements.txt                            # Requirements.txt file for creating environment
 ```
 
 ---
