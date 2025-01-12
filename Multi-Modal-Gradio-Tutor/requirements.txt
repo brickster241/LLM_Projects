@@ -7,3 +7,4 @@ ipywidgets
 streamlit
 anthropic
 google.generativeai
+gradio

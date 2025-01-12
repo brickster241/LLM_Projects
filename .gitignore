@@ -178,6 +178,3 @@ products_vectorstore/
 
 # ignore diagnostics reports
 **/report.txt
-
-# custom
-MultiModal-Gradio-UI-Chatbot/

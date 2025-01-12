@@ -44,13 +44,8 @@
    ```
 
 3. **Run the app:**
-   - For Streamlit:
      ```bash
-     streamlit run app.py
-     ```
-   - For Gradio (if implemented):
-     ```bash
-     python gradio_app.py
+     streamlit run streamlit_app.py
      ```
 
 ---
@@ -85,6 +80,20 @@
   - Gradio (optional) for more interactive control.
 
 ---
+
+## 📦 File Structure
+
+```plaintext
+LLM-Projects/
+├── .env                                            # .env File for storing OPENAI API Key
+├── Logic-Wars/                                     # Project Directory
+│   ├── llm_manager.py                              # class to handle different LLM connections, conversations
+│   ├── streamlit_app.py                            # Main Streamlit App
+│   ├── README.md                                   # Project documentation
+│   ├── requirements.txt                            # Requirements.txt file for creating environment
+```
+
+
 
 ## **Future Plans**
 
