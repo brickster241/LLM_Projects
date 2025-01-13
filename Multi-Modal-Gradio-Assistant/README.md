@@ -1,5 +1,4 @@
 # Multi-Modal-Gradio-Assistant
----
 ## Overview
 The **Multi-Modal Gradio Assistant** is a versatile AI assistant that leverages the power of large language models (LLMs) to deliver expert-level responses across multiple domains. The assistant supports both text and audio input and provides responses in text and synthesized speech. It can also utilize external tools to enhance its capabilities, making it a comprehensive solution for multimodal AI interactions.
 
@@ -35,7 +34,7 @@ The **Multi-Modal Gradio Assistant** is a versatile AI assistant that leverages 
 4. **Tool Mapping**: Maps tools (e.g., Ask Gemini, Ask Ollama) to specific functionalities.
 
 ### Supported Models
-- OpenAI Whisper for audio transcription.
+- OpenAI `Whisper` for audio transcription.
 - OpenAI `gpt-4o-mini`, Google `gemini-1.5-flash` and Ollama `llama3.2:3b` for text generation.
 - OpenAI TTS for speech synthesis.
 
@@ -141,3 +140,10 @@ with gr.Blocks() as ui:
         entry = gr.Textbox(label="Ask our technical expert anything:")
         audio_input = gr.Audio(sources="microphone", type="filepath", label="Record audio")
 ```
+---
+## **Future Plans**
+
+- Add Image generation as a tool by using `DALL-E-3` Model.
+- Support more open-source LLMs in specialized domains.
+
+---
