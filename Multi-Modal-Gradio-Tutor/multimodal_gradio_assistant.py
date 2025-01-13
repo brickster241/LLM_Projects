@@ -66,7 +66,7 @@ class MultiModal_Gradio_Assistant:
             + general_prompt
         )
         self.sys_prompt_ollama = (
-            "You are a helpful AI Assistant who is an expert in general knowledge, space and languages."
+            "You are a helpful AI Assistant who is an expert in general knowledge, space and spoken languages."
             + general_prompt
         )
 
@@ -126,24 +126,6 @@ class MultiModal_Gradio_Assistant:
             },
         }
 
-        self.draw_picture_function = {
-            "name": "draw_picture",
-            "description": (
-                "Create a visually detailed and contextually appropriate illustration related to the question."
-            ),
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "question_for_topic": {
-                        "type": "string",
-                        "description": "The question which is related to a certain topic.",
-                    },
-                },
-                "required": ["question_for_topic"],
-                "additionalProperties": False,
-            },
-        }
-
     def ask_assistant(self, history):
         """
         Handles interactions with the assistant by processing user inputs and generating responses.
@@ -191,6 +173,83 @@ class MultiModal_Gradio_Assistant:
         history[-1]['content'] = generated_content
         return history
     
+    def ask_assistant_stream(self, history):
+        """
+        Handles interactions with the assistant by processing user inputs and generating responses in stream format.
+        :param history: List of conversation history.
+        :return: Updated conversation history in stream format.
+        """
+        prompts = [{"role": "system", "content": self.sys_prompt_gpt}] + history
+        response = self.llm_manager.openai_client.chat.completions.create(
+            model='gpt-4o-mini',
+            tools=self.assistant_tools,
+            messages=prompts,
+            stream=True
+        )
+        generated_content = ""
+        history += [{"role":"assistant", "content":generated_content}]
+
+        tool_call_accumulator = ""  # Accumulator for JSON fragments of tool call arguments
+        tool_call_id = None  # Current tool call ID
+        tool_call_function_name = None # Function name
+        tool_calls = []  # List to store complete tool calls
+        
+        for chunk in response:
+            # Get Typewriting effect
+            if chunk.choices[0].delta.content:
+                generated_content += chunk.choices[0].delta.content or ""
+                history[-1]['content'] = generated_content
+                yield history
+            
+            # Check for tool_calls
+            if chunk.choices[0].delta.tool_calls:
+                for tc in chunk.choices[0].tool_calls:
+                    if tc.id:   # New tool call detected here
+                        tool_call_id = tc.id
+                        if tool_call_function_name is None:
+                            tool_call_function_name = tc.function.name
+                    
+                    tool_call_accumulator += tc.function.arguments if tc.function.arguments else ""
+                    
+                    # When the accumulated JSON string seems complete then:
+                    try:
+                        func_args = json.loads(tool_call_accumulator)
+                        
+                        # Handle tool call and get response
+                        tool_response, tool_call = self.handle_tool_call(tool_call_function_name, func_args, tool_call_id)
+                        tool_calls.append(tool_call)
+                        
+                        prompts.append({
+                                    "role": "assistant",
+                                    "tool_calls": tool_calls})
+            
+                        prompts.append(tool_response)
+                        
+                        # Call the LLM again with updated context, but without the tools.
+                        updated_response = self.llm_manager.openai_client.chat.completions.create(
+                                        model='gpt-4o-mini',
+                                        messages=prompts,
+                                        stream=True)
+                        
+                        # Reset and accumulate new full response
+                        generated_content = ""
+                        for chunk in updated_response:
+                            if chunk.choices[0].delta.content:
+                                generated_content += chunk.choices[0].delta.content or ""
+                                history[-1]['content'] = generated_content
+                                yield history
+                        
+                        # Reset tool call accumulator and related variables
+                        tool_call_accumulator = ""
+                        tool_call_id = None
+                        tool_call_function_name = None
+                        tool_calls = []
+
+                    except json.JSONDecodeError as e:
+                        print("Exception Occured : {e}")
+
+        # self.play_TTS(generated_content)    
+    
     def handle_tool_call(self, function_name, arguments, tool_call_id):
         """
         Handles tool calls invoked during assistant interactions.
@@ -236,28 +295,7 @@ class MultiModal_Gradio_Assistant:
         :return: Model response.
         """
         return self.llm_manager.query_gemini(system_prompt=self.sys_prompt_gemini, msg_prompts=[{"role" : "user", "parts": [question]}])
-
-    def draw_picture(self, question):
-        """
-        Generates an image based on the provided question using OpenAI's DALL-E model.
-        :param question: The input question for image generation.
-        :return: Generated image in base64 json format.
-        """
-        image_response = self.llm_manager.openai_client.images.generate(
-            model="dall-e-3",
-            prompt=(
-                f"A vibrant, detailed futuristic style image representing the essence of the question: {question}"
-            ),
-            size="1024x1024",
-            n=1,
-            response_format="b64_json",
-            style="vivid",
-        )
-        image_base64 = image_response.data[0].b64_json
-        # image_data = base64.b64decode(image_base64)
-        # Image.open(BytesIO(image_data))
-        return image_base64
-
+    
     def play_audio_ffplay(self, audio_segment):
         """
         Plays an audio segment using ffplay.
@@ -298,6 +336,7 @@ class MultiModal_Gradio_Assistant:
                 response = openai.audio.transcriptions.create(
                     model="whisper-1", file=audio_file
                 )
+            gr.Info("Transcription Successful !", duration=5)
             return response.text
         except Exception as e:
             return f"An error occurred: {e}"
@@ -307,8 +346,8 @@ class MultiModal_Gradio_Assistant:
         Initializes and runs the Gradio UI.
         """
         with gr.Blocks() as ui:
-            with gr.Row() as chatRow:
-                chatbot = gr.Chatbot(height=500, type="messages", label="MultiModal Technical Expert Chatbot")
+            with gr.Row():
+                chatbot = gr.Chatbot(height=600, type="messages", label="MultiModal Technical Expert Chatbot")
             with gr.Row():
                 entry = gr.Textbox(label="Ask our technical expert anything:")
                 audio_input = gr.Audio(
@@ -335,10 +374,10 @@ class MultiModal_Gradio_Assistant:
                 history += [{"role":"user", "content":message}]
                 yield "", history
                 
-            entry.submit(do_entry, inputs=[entry, chatbot], outputs=[entry,chatbot]).then(self.ask_assistant, inputs=chatbot, outputs=[chatbot])
+            entry.submit(do_entry, inputs=[entry, chatbot], outputs=[entry,chatbot]).then(self.ask_assistant_stream, inputs=chatbot, outputs=[chatbot])
             
             clear.click(lambda: None, inputs=None, outputs=chatbot, queue=False)
-        ui.launch()
+        ui.queue().launch()
 
 
 if __name__ == "__main__":
