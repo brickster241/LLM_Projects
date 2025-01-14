@@ -1,0 +1,16 @@
+ollama
+openai
+openai-whisper
+python-dotenv
+jupyterlab
+ipywidgets
+streamlit
+anthropic
+google.generativeai
+gradio
+diffusers
+transformers
+accelerate
+datasets
+soundfile
+sentencepiece
