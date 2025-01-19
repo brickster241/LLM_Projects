@@ -70,8 +70,8 @@ Welcome to the **LLM Summarizer**! This application utilizes multiple cutting-ed
 2. Go inside directory, create and activate environment and install required dependencies using Anaconda:
    ```bash
    cd LLM_Projects/MultiMedia-LLM-Summarization-Tool
-   conda create --name llm_env python=3.11
-   conda activate llm_env
+   conda create --name llm_summarizer python=3.11
+   conda activate llm_summarizer
    pip install -r requirements.txt
    ```
 

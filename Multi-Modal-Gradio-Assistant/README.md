@@ -42,6 +42,12 @@ The **Multi-Modal Gradio Assistant** is a versatile AI assistant that leverages 
 
 ## Installation
 
+### Prerequisites
+- Python 3.11+
+- An OpenAI API Key, Anthropic API Key and Google API Key.
+- Ollama's Open source Models (`llama3.2:3b`).
+- Ensure you have ffmpeg installed and added to PATH, for Speech-to-Text conversion.
+
 ### Steps
 1. **Clone this repository:**
    ```bash
@@ -53,11 +59,16 @@ The **Multi-Modal Gradio Assistant** is a versatile AI assistant that leverages 
    ```
 3. **Create environment using conda and install dependencies:**
    ```bash
-   conda create --name llm_env python=3.11
-   conda activate llm_env
+   conda create --name gradio_bot_env python=3.11
+   conda activate gradio_bot_env
    pip install -r requirements.txt
    ```
-4. **Run the assistant:**
+4. **Add a `.env` file based on file structure below, containing all your API Keys :** 
+   ```code
+   OPENAI_API_KEY=yourOPENAIAPIKey
+   GOOGLE_API_KEY=yourGOOGLEAPIKey
+   ```
+5. **Run the assistant:**
    ```bash
    python multimodal_gradio_assistant.py
    ```
