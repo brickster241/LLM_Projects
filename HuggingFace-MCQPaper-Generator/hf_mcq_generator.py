@@ -13,21 +13,22 @@ class HF_MCQGenerator:
     - Generate MCQ papers based on a specified domain and difficulty.
     """
 
-    def __init__(self, model_name="meta-llama/Llama-3.2-3B-Instruct"):
-        self.model_name = model_name
+    def __init__(self):
+        self.model_name = "meta-llama/Llama-3.1-8B-Instruct"
         self.model = None
         self.tokenizer = None
+        self.quant_config = None
 
     def login(self, token_env_var="HF_TOKEN"):
         """Logs into the Hugging Face Hub using a token from an environment variable."""
-        hf_token = os.getenv(token_env_var)
-        if not hf_token:
+        self.hf_token = os.getenv(token_env_var)
+        if not self.hf_token:
             raise ValueError("Hugging Face token not found. Please set it in the environment variables.")
-        login(token=hf_token, add_to_git_credential=True)
+        login(token=self.hf_token, add_to_git_credential=True)
 
     def setup_model(self):
         """Initializes the model with quantization configuration."""
-        quant_config = BitsAndBytesConfig(
+        self.quant_config = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_use_double_quant=True,
             bnb_4bit_quant_type="nf4",
@@ -37,7 +38,8 @@ class HF_MCQGenerator:
         self.model = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=self.model_name,
             device_map="auto",
-            quantization_config=quant_config
+            quantization_config=self.quant_config,
+            trust_remote_code=True
         )
 
     def setup_tokenizer(self):
@@ -60,10 +62,10 @@ class HF_MCQGenerator:
             {"role": "user", "content": USER_PROMPT}
         ]
 
-        # Tokenize input
+        # Tokenize input & Generate Response
         model_inputs = self.tokenizer.apply_chat_template(conversation=messages, return_tensors="pt").to("cuda")
-        streamer = TextStreamer(tokenizer=self.tokenizer)
-        model_output = self.model.generate(model_inputs, max_new_tokens=5000, streamer=streamer)
-        response = self.tokenizer.decode(model_output[0], skip_special_tokens=True)
+        model_output = self.model.generate(model_inputs, max_new_tokens=5000)
+        response = self.tokenizer.decode(model_output[0])
 
-        return response
+        # Remove the special token Headers
+        return response.split("<|end_header_id|>")[-1].strip().replace("<|eot_id|>","")
